@@ -45,12 +45,13 @@ class PatientRepository
       room.add(patient)
 
       @patients << patient
-      # We need to update our @next_id to match what was in the csv.
-      # So we set it equal to the last row that we read, then we go to line 52
       @next_id = row[:id]
     end
-    # And here we add one to our @next_id, so it's one higher than the last
-    # one we read from the csv.
-    @next_id += 1
+    # We need to update our @next_id to match what was in the csv.
+    # We set our `@next_id` equal to the id of the latest element
+    # we read from the csv, and add one.
+    # Unless we didn't load anything from our csv. (`@next_id` doesn't change.)
+    # See RoomRepository for alternative solution.
+    @next_id = @patients.last.id + 1 unless @patients.empty?
   end
 end
